@@ -10,7 +10,7 @@ From: fedora:33
     dnf -y install gcc-c++ make ruby
     dnf -y install cairo-devel pango-devel zlib-devel
     dnf -y install libnsl
-    dnf -y install python python-biopython python-wheel-wheel python3-virtualenv python3-pip
+    dnf -y install python python-biopython python3-wheel python-wheel-wheel python3-virtualenv python3-pip
     dnf -y install pandoc
     dnf -y install java-11-openjdk java-11-openjdk-devel ant
 
