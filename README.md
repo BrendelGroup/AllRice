@@ -18,7 +18,7 @@ which provides, for example:
 ```bash
 singularity exec -e -B ${PWD} AllRice.sif  ngsutilsj help
 singularity exec -e -B ${PWD} AllRice.sif  umi_tools --help
-singularity exec -e -B ${PWD} DDN.sif      DiscovarDeNovo -help
+singularity exec -e -B ${PWD} DDN.sif      DiscovarDeNovo -h
 ```
 
 
