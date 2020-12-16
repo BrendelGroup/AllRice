@@ -7,27 +7,32 @@ From: fedora:33
 %post
     dnf -y update
     dnf -y install bc bzip2 findutils git lftp mlocate tcsh unzip zip wget which
-    dnf -y install gcc-c++ make ruby
+    dnf -y install gcc-c++ make automake ruby
     dnf -y install cairo-devel pango-devel zlib-devel
     dnf -y install libnsl
     dnf -y install python python-biopython python3-wheel python-wheel-wheel python3-virtualenv python3-pip
+    dnf -y install python3-h5py
     dnf -y install pandoc
     dnf -y install java-11-openjdk java-11-openjdk-devel ant
+    dnf -y install perl-App-cpanminus
 
 
 ### Read quality control
 
     echo 'Installing FASTQC from http://www.bioinformatics.babraham.ac.uk/projects/fastqc/ '
     cd /opt
-    wget http://www.bioinformatics.babraham.ac.uk/projects/fastqc/fastqc_v0.11.8.zip
-    unzip fastqc_v0.11.8.zip
+    wget http://www.bioinformatics.babraham.ac.uk/projects/fastqc/fastqc_v0.11.9.zip
+    cpanm install FindBin
+    unzip fastqc_v0.11.9.zip
     chmod +x FastQC/fastqc
+    \rm fastqc_v0.11.9.zip
 
     echo 'Installing Trimmomatic from http://www.usadellab.org/cms/index.php?page=trimmomatic '
     cd /opt
     wget http://www.usadellab.org/cms/uploads/supplementary/Trimmomatic/Trimmomatic-0.39.zip
     unzip Trimmomatic-0.39.zip
 #   Use:	java -jar /opt/Trimmomatic-0.39/trimmomatic-0.39.jar
+    \rm Trimmomatic-0.39.zip
 
 
 ### Read manipulation
@@ -36,14 +41,79 @@ From: fedora:33
     cd /opt
     wget http://ftp-trace.ncbi.nlm.nih.gov/sra/sdk/2.10.5/sratoolkit.2.10.5-ubuntu64.tar.gz
     tar -xzf sratoolkit.2.10.5-ubuntu64.tar.gz
+    \rm  sratoolkit.2.10.5-ubuntu64.tar.gz
 
     echo 'Installing UMI-tools from https://github.com/CGATOxford/UMI-tools '
     pip3 install --upgrade umi-tools
 
 
+### Read mapping
+
+    echo 'Installing BOWTIE2 version 2.4.2 '
+    cd /opt
+    wget https://github.com/BenLangmead/bowtie2/releases/download/v2.4.2/bowtie2-2.4.2-linux-x86_64.zip
+    unzip bowtie2-2.4.2-linux-x86_64.zip 
+    \rm bowtie2-2.4.2-linux-x86_64.zip
+
+    echo 'Installing hisat2 '
+    cd /opt
+    wget https://cloud.biohpc.swmed.edu/index.php/s/oTtGWbWjaxsQ2Ho/download
+    mv download hisat2.zip
+    unzip hisat2.zip 
+    \rm hisat2.zip 
+
+
+### Repeat masking tools
+
+    echo 'Installing rmblast from http://www.repeatmasker.org/ '
+    cd /opt
+    wget http://www.repeatmasker.org/rmblast-2.10.0+-x64-linux.tar.gz
+    tar -xzf rmblast-2.10.0+-x64-linux.tar.gz
+    \rm rmblast-2.10.0+-x64-linux.tar.gz
+
+    echo 'Installing TRF '
+    cd /opt
+    git clone https://github.com/Benson-Genomics-Lab/TRF.git
+    cd TRF
+    mkdir build && cd build
+    ../configure
+    make
+    make install
+    make clean
+    cd ../..
+
+    echo 'Installing RepeatMasker from http://www.repeatmasker.org/ '
+    cd /opt
+    wget http://repeatmasker.org/RepeatMasker/RepeatMasker-4.1.1.tar.gz
+    tar -xzf RepeatMasker-4.1.1.tar.gz 
+    echo "/usr/local/bin/trf" > rmcnf
+    echo "2" >> rmcnf
+    echo "/opt/rmblast-2.10.0/bin" >> rmcnf
+    echo "Y" >> rmcnf
+    echo "5" >> rmcnf
+    cd RepeatMasker
+    perl ./configure < ../rmcnf
+    cd Libraries
+    wget https://github.com/BrendelGroup/AllRice/raw/main/data/RITE-12-10-2020.tgz
+    tar -xzf RITE-12-10-2020.tgz
+    \rm RITE-12-10-2020.tgz
+# ... obtained by download from https://www.genome.arizona.edu/cgi-bin/rite/index.cgi (selecting all Oryza entries)
+    cd ../..
+    \rm RepeatMasker-4.1.1.tar.gz rmcnf
+
+### RSEM
+
+    echo 'Installing RSEM '
+    cd /opt
+    git clone https://github.com/deweylab/RSEM
+    cd RSEM/
+    make
+    make clean
+
+
 ### Alignment software
 
-    echo 'Installing BLAST+ version 2.10.1 from NCBI'
+    echo 'Installing BLAST+ version 2.10.1 from NCBI '
     cd /opt
     wget ftp://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/2.10.1/ncbi-blast-2.10.1+-x64-linux.tar.gz
     tar -xzf ncbi-blast-2.10.1+-x64-linux.tar.gz
@@ -63,7 +133,7 @@ From: fedora:33
 
 ### Utilities
 
-    echo 'Installing the GenomeTools package:'
+    echo 'Installing the GenomeTools package: '
     cd /opt
     git clone https://github.com/genometools/genometools.git
     cd genometools
@@ -81,11 +151,13 @@ From: fedora:33
     ant jar
     ln -s /opt/ngsutilsj/dist/ngsutilsj /usr/local/bin/ngsutilsj
 
-
 %environment
     export LC_ALL=C
     export PATH=$PATH:/opt/FastQC
     export PATH=$PATH:/opt/sratoolkit.2.10.5-ubuntu64/bin
+    export PATH=$PATH:/opt/bowtie2-2.4.2-linux-x86_64
+    export PATH=$PATH:/opt/hisat2-2.2.1
+    export PATH=$PATH:/opt/RSEM
     export PATH=$PATH:/opt/GENOMETHREADER/bin
     export BSSMDIR="/opt/GENOMETHREADER/bin/bssm"
     export GTHDATADIR="/opt/GENOMETHREADER/bin/gthdata"
