@@ -118,13 +118,22 @@ From: fedora:33
     \rm RepeatMasker-4.1.1.tar.gz rmcnf
 
 
-### RSEM
+### RSEM, R, EBseq
+
+    echo 'Installing R '
+    cd /opt
+    dnf -y install R-base R-devel
+    echo 'repo <- "http://ftp.ussg.iu.edu/CRAN"' > R2install
+    echo 'install.packages("BiocManager", repos = repo)' >> R2install
+    echo 'BiocManager::install(c("EBseq","DESeq2"), ask=FALSE)' >> R2install
+    Rscript R2install
 
     echo 'Installing RSEM '
     cd /opt
     git clone https://github.com/deweylab/RSEM
     cd RSEM/
     make
+    make ebseq
     make clean
 
 
