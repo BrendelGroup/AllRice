@@ -46,6 +46,18 @@ From: fedora:33
     echo 'Installing UMI-tools from https://github.com/CGATOxford/UMI-tools '
     pip3 install --upgrade umi-tools
 
+    echo 'Installing HTSLIB from http://www.htslib.org/ '
+    cd /opt
+    git clone git://github.com/samtools/htslib.git htslib
+    cd htslib
+    make && make install
+
+    echo 'Installing SAMTOOLS from http://www.htslib.org/ '
+    cd /opt
+    git clone git://github.com/samtools/samtools.git samtools
+    cd samtools
+    make && make install
+
 
 ### Read mapping
 
@@ -61,6 +73,10 @@ From: fedora:33
     mv download hisat2.zip
     unzip hisat2.zip 
     \rm hisat2.zip 
+
+    echo 'Installing STAR from https://github.com/alexdobin/STAR '
+    cd /opt
+    git clone https://github.com/alexdobin/STAR
 
 
 ### Repeat masking tools
@@ -100,6 +116,7 @@ From: fedora:33
 # ... obtained by download from https://www.genome.arizona.edu/cgi-bin/rite/index.cgi (selecting all Oryza entries)
     cd ../..
     \rm RepeatMasker-4.1.1.tar.gz rmcnf
+
 
 ### RSEM
 
@@ -151,12 +168,14 @@ From: fedora:33
     ant jar
     ln -s /opt/ngsutilsj/dist/ngsutilsj /usr/local/bin/ngsutilsj
 
+
 %environment
     export LC_ALL=C
     export PATH=$PATH:/opt/FastQC
     export PATH=$PATH:/opt/sratoolkit.2.10.5-ubuntu64/bin
     export PATH=$PATH:/opt/bowtie2-2.4.2-linux-x86_64
     export PATH=$PATH:/opt/hisat2-2.2.1
+    export PATH=$PATH:/opt/STAR/bin/Linux_x86_64
     export PATH=$PATH:/opt/RSEM
     export PATH=$PATH:/opt/GENOMETHREADER/bin
     export BSSMDIR="/opt/GENOMETHREADER/bin/bssm"
