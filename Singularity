@@ -15,6 +15,8 @@ From: fedora:33
     dnf -y install pandoc
     dnf -y install java-11-openjdk java-11-openjdk-devel ant
     dnf -y install perl-App-cpanminus
+    dnf -y install curl libcurl libcurl-devel ncurses ncurses-devel
+    dnf -y install openssl openssl-devel
 
 
 ### Read quality control
@@ -118,14 +120,14 @@ From: fedora:33
     \rm RepeatMasker-4.1.1.tar.gz rmcnf
 
 
-### RSEM, R, EBseq
+### RSEM, R, EBSeq
 
     echo 'Installing R '
     cd /opt
     dnf -y install R-base R-devel
     echo 'repo <- "http://ftp.ussg.iu.edu/CRAN"' > R2install
     echo 'install.packages("BiocManager", repos = repo)' >> R2install
-    echo 'BiocManager::install(c("EBseq","DESeq2"), ask=FALSE)' >> R2install
+    echo 'BiocManager::install(c("EBSeq","DESeq2"), ask=FALSE)' >> R2install
     Rscript R2install
 
     echo 'Installing RSEM '
