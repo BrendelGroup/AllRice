@@ -136,7 +136,6 @@ From: fedora:33
     cd RSEM/
     make
     make ebseq
-    make clean
 
 
 ### Alignment software
