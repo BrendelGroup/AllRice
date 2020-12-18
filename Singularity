@@ -135,7 +135,7 @@ From: fedora:33
     git clone https://github.com/deweylab/RSEM
     cd RSEM/
     # ... we don't want the unaligned reads showing up in the BAM file when using bowtie2, thus:
-    sed -i -e "s#--dpad 0#--no_unal --dpad0#g" rsem-calculate-expression
+    sed -i -e "s#--dpad 0#--no-unal --dpad0#g" rsem-calculate-expression
     make
     make ebseq
 
