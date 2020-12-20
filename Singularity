@@ -127,7 +127,7 @@ From: fedora:33
     dnf -y install R-base R-devel
     echo 'repo <- "http://ftp.ussg.iu.edu/CRAN"' > R2install
     echo 'install.packages("BiocManager", repos = repo)' >> R2install
-    echo 'BiocManager::install(c("EBSeq","DESeq2"), ask=FALSE)' >> R2install
+    echo 'BiocManager::install(c("EBSeq","DESeq2","R2HTML"), ask=FALSE)' >> R2install
     Rscript R2install
 
     echo 'Installing RSEM '
