@@ -190,6 +190,7 @@ From: fedora:33
     export PATH=$PATH:/opt/STAR/bin/Linux_x86_64
     export PATH=$PATH:/opt/RSEM
     export PATH=$PATH:/opt/GENOMETHREADER/bin
+    export PATH=$PATH:/opt/RepeatMasker
     export BSSMDIR="/opt/GENOMETHREADER/bin/bssm"
     export GTHDATADIR="/opt/GENOMETHREADER/bin/gthdata"
 
