@@ -152,6 +152,16 @@ From: fedora:33
     rm ncbi-blast-2.10.1+-x64-linux.tar.gz
     cd ..
 
+    echo 'Installing MuSeqBox version 5.5 from BrendelGroup '
+    cd /opt
+    wget http://www.brendelgroup.org/bioinformatics2go/Download/MuSeqBox-3-4-2020.tar.gz
+    tar -xzf MuSeqBox-3-4-2020.tar.gz
+    cd MUSEQBOX5.5/src/
+    make linux
+    make install
+    make clean
+    cd ../..
+
     echo 'Installing GenomeThreader version 1.7.3 spliced aligner '
     cd /opt
     wget http://genomethreader.org/distributions/gth-1.7.3-Linux_x86_64-64bit.tar.gz
