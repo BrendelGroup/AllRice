@@ -1,14 +1,15 @@
-#!/bin/tcsh
+#!/bin/bash
 #
 #xDdNfilter looks for *-mergedreads-* files and applies the rpoDdNscreen.py script
 #  to each file simultaneously (in the background) to separate read pairs with
 #  acceptable overlap for DiscovarDeNovo assembly.
 
-foreach file (*-mergedreads-*)
+foreach file in *-mergedreads-*
+do
   mkdir DIR-$file
   mv $file DIR-$file
   cd DIR-$file
-  (rpoDdNscreen.py $file >& err) &
+  (python rpoDdNscreen.py $file >& err) &
   cd ..
-end
+done
 wait
