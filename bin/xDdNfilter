@@ -4,12 +4,12 @@
 #  to each file simultaneously (in the background) to separate read pairs with
 #  acceptable overlap for DiscovarDeNovo assembly.
 
-foreach file in *-mergedreads-*
+for file in *-mergedreads-*
 do
   mkdir DIR-$file
   mv $file DIR-$file
   cd DIR-$file
-  (python rpoDdNscreen.py $file >& err) &
+  (rpoDdNscreen.py $file >& err) &
   cd ..
 done
 wait
