@@ -189,6 +189,12 @@ From: fedora:33
     cd ngsutilsj
     ant jar
     ln -s /opt/ngsutilsj/dist/ngsutilsj /usr/local/bin/ngsutilsj
+    cd ../..
+
+    echo 'Installing the AllRice package: '
+    cd /opt
+    git clone https://github.com/BrendelGroup/AllRice
+    cd ..
 
 
 %environment
@@ -201,6 +207,7 @@ From: fedora:33
     export PATH=$PATH:/opt/RSEM
     export PATH=$PATH:/opt/GENOMETHREADER/bin
     export PATH=$PATH:/opt/RepeatMasker
+    export PATH=$PATH:/opt/AllRice/bin
     export BSSMDIR="/opt/GENOMETHREADER/bin/bssm"
     export GTHDATADIR="/opt/GENOMETHREADER/bin/gthdata"
 
