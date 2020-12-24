@@ -1,13 +1,13 @@
 #!/usr/bin/env python
 #
 #rpoDdNscreen.py ("read pair overlap screen for DiscovarDeNovo")
-#  selects overlapping read pairs, requring that the left-unique,
+#  selects overlapping read pairs, requiring that the left-unique,
 #  overlap, and right-unique segments all be at least of length
 #  "threshold"
 #
 import sys
+from itertools import zip_longest
 from Bio import SeqIO
-from itertools import izip_longest
 from Bio import pairwise2
 from Bio.pairwise2 import format_alignment
 
@@ -22,7 +22,7 @@ threshold = 40
 i = 0
 
 readiter = SeqIO.parse(open(inpath), "fastq")
-for rec1, rec2 in izip_longest(readiter, readiter):
+for rec1, rec2 in zip_longest(readiter, readiter):
 
     i += 1
     if i%50000 == 0 :

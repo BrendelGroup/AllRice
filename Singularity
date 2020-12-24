@@ -124,7 +124,7 @@ From: fedora:33
 
     echo 'Installing R '
     cd /opt
-    dnf -y install R-base R-devel
+    dnf -y install R-base
     echo 'repo <- "http://ftp.ussg.iu.edu/CRAN"' > R2install
     echo 'install.packages("BiocManager", repos = repo)' >> R2install
     echo 'BiocManager::install(c("EBSeq","DESeq2","R2HTML"), ask=FALSE)' >> R2install
