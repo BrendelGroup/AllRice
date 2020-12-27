@@ -9,4 +9,4 @@
 #
 # To run:
 #
-singularity exec -e -B ../.. ../../tools/AllRice.sif  bash ./0Record
+singularity exec -e -B ${PWD}/../.. ../../tools/AllRice.sif  bash ./0Record
