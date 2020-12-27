@@ -1,0 +1,18 @@
+#!/bin/bash
+#
+
+BOWTIE2_DIR=/opt/bowtie2-2.4.2-linux-x86_64
+GFF3FILE=IRBB7.gff3
+FASTAFILE=IRBB7.fa
+LABEL=IRBB7
+
+mkdir ref
+
+
+# Prepare the reference genome for the bowtie2 aligner:
+#
+rsem-prepare-reference --gff3 ${GFF3FILE} --bowtie2 --bowtie2-path ${BOWTIE2_DIR} ${FASTAFILE}  ref/${LABEL}
+
+# prepare reference genome for STAR aligner
+# rsem-prepare-reference --gtf ${SUBJECTGFF1} --star --star-path ${STAR_DIR} ${SUBJECTFA}  ${SUBJECTNAME}
+# rsem-prepare-reference --gtf ${SUBJECTGFF501} --star --star-path ${STAR_DIR} ${SUBJECTFA}  ${SUBJECTNAME}

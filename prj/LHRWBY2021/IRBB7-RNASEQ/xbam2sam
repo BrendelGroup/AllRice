@@ -1,0 +1,16 @@
+#!/bin/bash
+#
+
+SAMPLES="IRBB7C1 IRBB7C2 IRBB7P1 IRBB7P2 IRBB7M1 IRBB7M2"
+
+
+for sample in ${SAMPLES}
+do
+  cd ${sample}
+  samtools sort ${sample}-bowtie2.genome.bam > ${sample}-sorted.genome.bam
+  samtools index ${sample}-sorted.genome.bam
+  cd ..
+done
+
+samtools merge -R Xa7a-100kb-Contig-masked RNA-Xa7a-100kb-Contig-masked.bam IRBB7*/*-sorted.genome.bam
+samtools view -h RNA-Xa7a-100kb-Contig-masked.bam | egrep -v "flattened_line" > RNA-Xa7a-100kb-Contig-masked.sam

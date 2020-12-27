@@ -1,0 +1,22 @@
+#!/bin/bash
+#
+
+BOWTIE2_DIR=/opt/bowtie2-2.4.2-linux-x86_64
+THREADS=10
+SEED_LENGTH=75
+LABEL=IRBB7
+
+
+READDIR=../reads/RNASEQ
+SAMPLES="IRBB7C1 IRBB7C2 IRBB7P1 IRBB7P2 IRBB7M1 IRBB7M2"
+
+
+for sample in ${SAMPLES}
+do
+READPAIR="${READDIR}/${sample}_1.fq ${READDIR}/${sample}_2.fq"
+  rsem-calculate-expression --bowtie2 --bowtie2-path ${BOWTIE2_DIR} --paired-end --num-threads ${THREADS} \
+	--output-genome-bam --calc-ci --time --seed-length ${SEED_LENGTH} \
+	${READPAIR}  ref/${LABEL} ${sample}-bowtie2  >&  err_rsem_${sample}-bowtie2
+  mkdir ${sample}
+  mv *${sample}-bowtie2* ${sample}
+done

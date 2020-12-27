@@ -1,0 +1,21 @@
+#!/bin/bash
+#
+
+./xrsemStep1 >& err-step1
+# => directory ref
+
+./xrsemStep2 >& err-step2
+# => directories IRBB7..
+
+./xbam2sam
+# => RNA-Xa7a-100kb-Contig-masked.bam, RNA-Xa7a-100kb-Contig-masked.sam
+# ... generated for use in IGV
+
+# ... P = positive, C = control, M = mutant
+
+./xrsemStep3a >& err-step3a
+./xrsemStep3b >& err-step3b
+./xrsemStep3c >& err-step3c
+./xrsemStep3d >& err-step3d
+# => IRBB7.ngvec, IRBB7.ump (46866 lines, one for each transcript isoform)
+# => directories de3WAY, dePvsC, dePvsM, deMvsC

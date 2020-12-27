@@ -1,0 +1,28 @@
+#!/bin/bash
+#
+
+LABEL="IRBB7"
+SAMPLES="IRBB7C1 IRBB7C2  IRBB7P1 IRBB7P2  IRBB7M1 IRBB7M2"
+GENELIST=""
+ISOFORMS=""
+for sample in ${SAMPLES}
+do
+  GENELIST="${GENELIST} ${sample}/${sample}-bowtie2.genes.results "
+  ISOFORMS="${ISOFORMS} ${sample}/${sample}-bowtie2.isoforms.results "
+done
+
+
+rsem-generate-data-matrix ${GENELIST} > ${LABEL}.genes.tab
+rsem-generate-data-matrix ${ISOFORMS} > ${LABEL}.isoforms.tab
+
+rsem-generate-ngvector ref/${LABEL}.transcripts.fa ${LABEL}
+
+
+rsem-run-ebseq                           ${LABEL}.genes.tab     2,2,2  ${LABEL}.genes.DE
+rsem-run-ebseq --ngvector ${LABEL}.ngvec ${LABEL}.isoforms.tab  2,2,2  ${LABEL}.isoforms.DE
+
+rsem-control-fdr ${LABEL}.genes.DE     0.01  ${LABEL}.genes.DE.01
+rsem-control-fdr ${LABEL}.isoforms.DE  0.01  ${LABEL}.isoforms.DE.01
+
+mkdir de3WAY
+mv IRBB7.genes.* IRBB7.isoforms.* de3WAY

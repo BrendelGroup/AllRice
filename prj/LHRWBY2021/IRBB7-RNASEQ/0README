@@ -1,0 +1,8 @@
+# Preparation:
+#
+cp ../genomes/IRBB7/IRBB7ctg.fa IRBB7.fa
+cp ../genomes/IRBB7/IRBB7ctg.gff3 IRBB7.gff3
+
+# Then:
+#
+singularity exec -e -B ${PWD}/../  ../tools/AllRice.sif  bash ./0Record
