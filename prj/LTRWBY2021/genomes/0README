@@ -1,0 +1,9 @@
+IRGSP
+	Current NCBI assembly/annotation for Oryza sativa japonica
+
+DiscovarDeNovo
+	DiscovarDeNovo assemblies
+	The assemblies were based on corresponding reads ../reads/*ddn.
+
+IRBB7
+	genome assembly/annotation based on DiscovarDeNovo plus ROI

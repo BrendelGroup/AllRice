@@ -1,0 +1,53 @@
+#OSseqPRJ	Last update: 12/23/2020
+#Various projects concerning rice genome analyses.
+
+ROI
+	Regions of Interest (Xa7a contig and protein)
+
+
+tools
+	singularity containers providing the code used in the project	
+
+
+reads
+	DDN     = DiscovarDeNovo library sequencing results
+	RAMPAGE = 3 libraries for inoculated, 2 libraries for control
+	RNASEQ  = 2 libraries each for inoculated, mock, and control
+
+
+genomes
+	DiscovarDeNovo
+		requires
+			tools/ddn.sif
+			tools/AllRice.sif
+			reads/DDN
+	IRGSP
+		used as reference genome
+	IRBB7
+		requires
+			tools/AllRice.sif
+			genomes/DisocovarDeNovo/IRBB7ddn
+			genomes/IRGSP
+			ROI
+
+
+IRBB7-RAMPAGE
+	requires
+		tools/tsr.sif
+		genomes/IRBB7/IRBB7ctg.fa
+		genomes/IRBB7/IRBB7ctg.gff3
+		reads/RAMPAGE/GSF*
+
+
+IRBB7-RNASEQ
+	requires
+		tools/AllRice.sif
+		genomes/IRBB7/IRBB7ctg.fa
+		genomes/IRBB7/IRBB7ctg.gff3
+		IRBB7-RAMPAGE/TSR files
+		reads/RNASEQ/IRBB7*.fq
+
+
+IGV
+	instructions on how to show all data in a locally
+	installed IGV browser

@@ -1,0 +1,29 @@
+#!/bin/bash
+#
+
+# OLD assembly/annotation:	https://www.ncbi.nlm.nih.gov/assembly/GCF_000005425.2/
+#
+wget https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/005/425/GCF_000005425.2_Build_4.0/GCF_000005425.2_Build_4.0_protein.faa.gz
+wget https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/005/425/GCF_000005425.2_Build_4.0/GCF_000005425.2_Build_4.0_genomic.fna.gz
+wget https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/005/425/GCF_000005425.2_Build_4.0/GCF_000005425.2_Build_4.0_genomic.gff.gz
+gunzip *.gz
+
+cat GCF_000005425.2_Build_4.0_protein.faa | gt seqtransform -addstopaminos > IRGSPpep
+makeblastdb -in IRGSPpep -dbtype prot -out IRGSPpep -parse_seqids
+mkdir BUILD4
+mv GCF_000005425.2* IRGSPpep*  BUILD4/
+
+
+# NEW assembly/annotation:	https://www.ncbi.nlm.nih.gov/assembly/GCF_001433935.1/
+#
+wget https://ftp.ncbi.nlm.nih.gov/genomes/all/annotation_releases/39947/102/GCF_001433935.1_IRGSP-1.0/GCF_001433935.1_IRGSP-1.0_protein.faa.gz
+wget https://ftp.ncbi.nlm.nih.gov/genomes/all/annotation_releases/39947/102/GCF_001433935.1_IRGSP-1.0/GCF_001433935.1_IRGSP-1.0_genomic.fna.gz
+wget https://ftp.ncbi.nlm.nih.gov/genomes/all/annotation_releases/39947/102/GCF_001433935.1_IRGSP-1.0/GCF_001433935.1_IRGSP-1.0_genomic.gff.gz
+
+gunzip *.gz
+cat GCF_001433935.1_IRGSP-1.0_protein.faa | gt seqtransform -addstopaminos > IRGSPpep
+makeblastdb -in IRGSPpep -dbtype prot -out IRGSPpep -parse_seqids
+
+# ... add the genome database IRGSPgenome to the protein database IRGSPpep:
+#
+makeblastdb -in GCF_001433935.1_IRGSP-1.0_genomic.fna -dbtype nucl -out IRGSPgenome -parse_seqids

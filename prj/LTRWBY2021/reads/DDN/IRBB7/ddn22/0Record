@@ -1,0 +1,39 @@
+# Processing of "ddn22" reads (internally labeled "160722NH_DNASEQ")
+#
+# raw/	contains the reads as downloaded from the sequencing center
+
+./xln
+
+# Adjust the number of threads to be used with the -j argument:
+#
+time singularity exec -e -B ${PWD}/../../../..  ../../../../tools/AllRice.sif  make -j 22 -f Makefile_PR_IRBB7ddn22 >& err
+
+#real	69m44.340s
+#user	458m20.766s
+#sys	18m43.522s
+#[]
+
+
+# Optional integrity checks:
+#
+# How many surving read pairs are there?
+#
+egrep -c "^>" *fa
+egrep "^Input Read Pairs" err
+# ... checks out!
+
+# Let's check that the sum total of IRBB7ddn22-mergedreads* entries is what we expect:
+#
+wc -l DIR*/IRBB7ddn22-mergedreads*
+# ... checks out! (the total should be 8 times the number of sequences in each of *fa files)
+
+# The summary shows how the surviving reads from the Trimmomatic step are further filtered
+# to select "good" read pairs that overlap such that the left-unique, overlap, and
+# right-unique regions are each at least 40 nt long (the expectation by library design is
+# that left and right reads are each 250 nt long and overlap by 100 nt):
+more summary
+
+
+# Cleaning up (removing intermediate files no longer needed):
+#
+singularity exec -e -B ${PWD}/../../../..  ../../../../tools/AllRice.sif  make -f Makefile_PR_IRBB7ddn22 cleanup

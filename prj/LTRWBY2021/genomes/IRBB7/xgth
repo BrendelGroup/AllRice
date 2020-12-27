@@ -1,0 +1,26 @@
+#!/bin/bash
+#
+cp ../IRGSP/IRGSPpep IRGSPpep1
+gth -genomic IRBB7ctg.fa -protein IRGSPpep1 -species rice                            > gth.IRGSPpepOnIRBB7 &
+cp ../IRGSP/IRGSPpep IRGSPpep2
+gth -genomic IRBB7ctg.fa -protein IRGSPpep2 -species rice -gff3out -skipalignmentout > gth.IRGSPpepOnIRBB7.gff3 &
+wait
+echo ""
+
+n=`egrep "MATCH" gth.IRGSPpepOnIRBB7  | wc -l`
+echo "Number of matches in gth.IRGSPpepOnIRBB7: $n"
+echo ""
+
+egrep "MATCH" gth.IRGSPpepOnIRBB7  | cut -f3 | sort -u | sed -e "s/\+$//;" > mp-IRGSP-IRBB7
+n=`wc -l mp-IRGSP-IRBB7`
+echo "Number of distinct IRGSPpep entries spliced aligned to IRBB7: $n"
+echo "  (listed in file mp-IRGSP-IRBB7)"
+
+n=`egrep -c "^>" ../IRGSP/IRGSPpep`
+echo "  (out of a total of $n IRGSPpep entries)"
+echo ""
+
+# Cleanup:
+#
+\rm IRGSPpep1* IRGSPpep2*
+

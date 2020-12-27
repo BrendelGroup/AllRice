@@ -1,0 +1,11 @@
+# Derivation of IRBB7ctg.fa and IRBB7ctg.gff3 = genome/annotation based on IRBB7
+#  DiscovarDeNovo contigs combined with our Region of Interest (ROI) for Xa7a
+
+singularity exec -e -B ../..  ../../tools/AllRice.sif  bash 0Record
+
+# ... should reproduce the entire workflow.
+# Requires:
+# 	../tools/AllRice.sif
+# 	../DisocovarDeNovo/IRBB7ddn
+# 	../IRGSP
+# 	../ROI

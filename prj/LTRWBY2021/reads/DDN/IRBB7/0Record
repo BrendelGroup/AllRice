@@ -1,0 +1,20 @@
+# Generating the combined set of DiscovarDeNovo cleaned-up reads for use in genome assembly
+#
+
+cd ddn1
+source 0Record
+cd ..
+
+cd ddn21
+source 0Record
+cd ..
+
+cd ddn22
+source 0Record
+cd ..
+
+xcombine >& summary
+#
+# ... this should produce 43,438,725 read pairs:
+#
+# IRBB7ddn_1.fastq.gz  IRBB7ddn_2.fastq.gz

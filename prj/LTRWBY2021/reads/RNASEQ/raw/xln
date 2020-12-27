@@ -1,0 +1,37 @@
+#!/bin/bash
+#
+RAWREAD_DIR=.
+
+# Rename the reads to more standard and sensible names. Take only the most distinguishing feature part as the name.
+#
+# strain [.1] (pH) containing no TALe
+# Strain [.2] (pH+avrXa7) for R gene Xa7 in IRBB7
+# strain [.3] (pH+Sac50) for another uncharacterized R gene in IRBB7
+#
+# L1.1-a_FCD2D8FACXX_L7_RICydfTAARAAPEI-93_1.fq.gz
+# L1.1-a_FCD2D8FACXX_L7_RICydfTAARAAPEI-93_2.fq.gz
+# L1.1-b_FCD2D8FACXX_L7_RICydfTABRAAPEI-94_1.fq.gz
+# L1.1-b_FCD2D8FACXX_L7_RICydfTABRAAPEI-94_2.fq.gz
+# L1.2_FCD2D8FACXX_L7_RICydfTACRAAPEI-109_1.fq.gz
+# L1.2_FCD2D8FACXX_L7_RICydfTACRAAPEI-109_2.fq.gz
+# L1.3_FCD2D8HACXX_L4_RICydfTADRAAPEI-118_1.fq.gz
+# L1.3_FCD2D8HACXX_L4_RICydfTADRAAPEI-118_2.fq.gz
+# L2.2_FCD2D8HACXX_L4_RICydfTAERAAPEI-126_1.fq.gz
+# L2.2_FCD2D8HACXX_L4_RICydfTAERAAPEI-126_2.fq.gz
+# L2.3_FCD2D8HACXX_L4_RICydfTAFRAAPEI-18_1.fq.gz
+# L2.3_FCD2D8HACXX_L4_RICydfTAFRAAPEI-18_2.fq.gz
+
+ln -s ${RAWREAD_DIR}/L1.1-a*_1.fq.gz C1_1.fastq.gz
+ln -s ${RAWREAD_DIR}/L1.1-a*_2.fq.gz C1_2.fastq.gz
+ln -s ${RAWREAD_DIR}/L1.1-b*_1.fq.gz C2_1.fastq.gz
+ln -s ${RAWREAD_DIR}/L1.1-b*_2.fq.gz C2_2.fastq.gz
+
+ln -s ${RAWREAD_DIR}/L1.2*_1.fq.gz   P1_1.fastq.gz
+ln -s ${RAWREAD_DIR}/L1.2*_2.fq.gz   P1_2.fastq.gz
+ln -s ${RAWREAD_DIR}/L2.2*_1.fq.gz   P2_1.fastq.gz
+ln -s ${RAWREAD_DIR}/L2.2*_2.fq.gz   P2_2.fastq.gz
+
+ln -s ${RAWREAD_DIR}/L1.3*_1.fq.gz   M1_1.fastq.gz
+ln -s ${RAWREAD_DIR}/L1.3*_2.fq.gz   M1_2.fastq.gz
+ln -s ${RAWREAD_DIR}/L2.3*_1.fq.gz   M2_1.fastq.gz
+ln -s ${RAWREAD_DIR}/L2.3*_2.fq.gz   M2_2.fastq.gz

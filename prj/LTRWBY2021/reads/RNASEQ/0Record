@@ -1,0 +1,7 @@
+#!/bin/bash
+#
+cd raw && bash xln && cd ..
+
+cd qctrl && bash xqctrl && cd ..
+
+bash xln

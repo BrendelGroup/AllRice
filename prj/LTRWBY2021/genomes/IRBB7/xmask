@@ -1,0 +1,21 @@
+#!/bin/bash
+#
+# Running RepeatMasker with 1*4 threads (with RMBlast), using the rice
+# transposable element file for masking:
+#
+RepeatMasker \
+	-lib /opt/RepeatMasker/Libraries/RITE-12-10-2020.fasta  \
+	-frag 500000 -div 35 -s -dir Xa7a-100kb-Contig.RMoutput -a -gff  \
+	Xa7a-100kb-Contig.fa
+
+# ... will produce *align, *masked, *out, *out.gff, and *tbl output files
+#     (*.fa.cat file seems redundant to *align and we'll delete it)
+\rm Xa7a-100kb-Contig.RMoutput/Xa7a-100kb-Contig.fa.cat
+
+# Now save a sequence-on-one-line copy:
+#
+cat <(head -1 Xa7a-100kb-Contig.RMoutput/Xa7a-100kb-Contig.fa.masked)   \
+    <(tail -n +2 Xa7a-100kb-Contig.RMoutput/Xa7a-100kb-Contig.fa.masked | tr -d '\n')   \
+    | sed '$a\'   \
+    | sed -e "s/Contig/Contig-masked/"   \
+> Xa7a-100kb-Contig-masked.fa

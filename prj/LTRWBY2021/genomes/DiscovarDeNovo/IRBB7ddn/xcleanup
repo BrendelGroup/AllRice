@@ -1,0 +1,22 @@
+#!/bin/bash
+#
+
+#Selecting "lines" of length >=500:
+#
+ln -s assembly/a.final/a.lines.fasta allIRBB7
+splitFASTAbyLength.pl -m 500 allIRBB7
+mv longallIRBB7 IRBB7ddn.fa
+mv shortallIRBB7 shortIRBB7ddn.fasta
+rm allIRBB7 
+
+egrep -c "^>" *.fa *.fasta
+#
+#Summary: 
+#
+#IRBB7ddn.fa:51562
+#shortIRBB7ddn.fasta:132486
+
+#Assembly statistics:
+#
+cat IRBB7ddn.fa         | asmbleval.pl > IRBB7ddn.stats
+cat shortIRBB7ddn.fasta | asmbleval.pl > shortIRBB7ddn.stats

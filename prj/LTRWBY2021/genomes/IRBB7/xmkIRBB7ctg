@@ -1,0 +1,10 @@
+#!/bin/bash
+#
+blastdbcmd -db IRBB7FL -entry 'all' -outfmt "%a" | sort > tmplstACC
+egrep "^>" fl-matching-Xa7a.fa | cut -c2- | sed -e "s/ $//" | sort > tmplstFL
+
+diff tmplstACC tmplstFL | egrep "^<" | cut -c3- > tmpLSTkeep
+
+cat Xa7a-100kb-Contig-masked.fa <(blastdbcmd -db IRBB7FL -entry_batch tmpLSTkeep) > IRBB7ctg.fa
+
+\rm tmplstACC tmplstFL tmpLSTkeep

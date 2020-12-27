@@ -1,0 +1,12 @@
+# RNA-Seq read files of rice IRBB7 received from Dr. Bing Yang
+# 
+# raw/*fq.gz:   ... original reads
+# qtrl/*/*fq:   ... reads remaining after quality control
+#
+# C (control)  = L1.1-a and L1.1-b: IRBB7 transfected with mock vectors that contain no avrXA7 gene
+# P (positive) = L1.2 and L2.2:     IRBB7 transfected with vectors that contain wt avrXA7 gene able to activate the Xa7 related gene expression
+# M (mutant)   = L1.3 and L2.3:     IRBB7 transfected with vectors that contain mutant avrXA7 gene unable to activate the Xa7 related gene expression
+#
+# To run:
+#
+singularity exec -e -B ../.. ../../tools/AllRice.sif  bash ./0Record

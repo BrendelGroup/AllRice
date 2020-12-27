@@ -1,0 +1,34 @@
+#!/bin/bash
+#
+
+# $1 shoud be the input gth*.gff3 file
+# We are going to replace the numbered IDs by IDs reflecting the targets:
+#
+egrep "Target" $1 | cut -d"=" -f2 | cut -d";" -f1     > tmpMRNAlst
+egrep "Target" $1 | cut -d"=" -f4 | cut -d" " -f1     > tmpTARGETlst
+
+sed -e "s#^#s\/#; s#\$#\$\/cds.#" tmpMRNAlst          > tmpMRNAlst1
+paste -d "" tmpMRNAlst1 tmpTARGETlst  > tmpEDITmRNA1
+sed -i -e "s#\$#;#" tmpEDITmRNA1
+
+sed -e "s#^#s\/#; s#\$#;\/cds.#" tmpMRNAlst           > tmpMRNAlst2
+paste -d "" tmpMRNAlst2 tmpTARGETlst  > tmpEDITmRNA2
+sed -i -e "s#\$#;#" tmpEDITmRNA2
+
+cat tmpEDITmRNA1 tmpEDITmRNA2 > tmpEDITmRNA
+sed -i tmpEDITmRNA -e "s#\$#\/g#"
+
+egrep "Parent=gene.*;Target=" $1 | cut -d";" -f2,3 | cut -d" " -f1 | sed -e "s#Parent=#s\/#; s#;Target=#;\/gene.#; s#\$#;\/;#; "  > tmpEDITgene1
+egrep "Parent=gene.*;Target=" $1 | cut -d";" -f2,3 | cut -d" " -f1 | sed -e "s#Parent=#s\/#; s#;Target=#\$\/gene.#; s#\$#;\/;#; " > tmpEDITgene2
+cat tmpEDITgene1 tmpEDITgene2 > tmpEDITgene
+
+
+cat tmpEDITmRNA tmpEDITgene > tmpEDIT
+sed -f tmpEDIT $1 > adj_$1
+
+
+echo "Showing the difference between input $1 and output adj_$1:"
+echo ""
+diff $1 adj_$1
+
+\rm tmpMRNAlst* tmpTARGETlst tmpEDITmRNA* tmpEDITgene* tmpEDIT
