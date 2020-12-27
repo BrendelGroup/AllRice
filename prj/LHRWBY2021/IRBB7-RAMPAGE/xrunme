@@ -1,0 +1,26 @@
+#!/bin/bash
+
+GoRAMPAGEroot=../tools/GoRAMPAGE
+configfile=./GoRAMPAGE.conf
+reads_dir=./reads
+barcodes=../reads/RAMPAGE/IRBB7_barcodes
+rRNA=${GoRAMPAGEroot}/test/genome/rRNA.ref
+GENOME=./genome
+nProc=10
+outputDir=./results 
+
+echo "GoRAMPAGE job starting"
+echo ""
+echo " ... steps 1-4 will be run separately; run times will be recorded in file GoRruntimes."
+
+
+(echo "GoRAMPAGE Step 1"; time ${GoRAMPAGEroot}/scripts/GoRAMPAGE -c $configfile -r $reads_dir -b $barcodes -R $rRNA -g $GENOME -p $nProc --outputdir $outputDir --runonlystep step1 >& err1; echo "") 2>&1 | tee -a GoRruntimes
+
+(echo "GoRAMPAGE Step 2"; time ${GoRAMPAGEroot}/scripts/GoRAMPAGE -c $configfile -r $reads_dir -b $barcodes -R $rRNA -g $GENOME -p $nProc --outputdir $outputDir --runonlystep step2 >& err2; echo "") 2>&1 | tee -a GoRruntimes
+
+(echo "GoRAMPAGE Step 3"; time ${GoRAMPAGEroot}/scripts/GoRAMPAGE -c $configfile -r $reads_dir -b $barcodes -R $rRNA -g $GENOME -p $nProc --outputdir $outputDir --runonlystep step3 >& err3; echo "") 2>&1 | tee -a GoRruntimes
+
+(echo "GoRAMPAGE Step 4"; time ${GoRAMPAGEroot}/scripts/GoRAMPAGE -c $configfile -r $reads_dir -b $barcodes -R $rRNA -g $GENOME -p $nProc --outputdir $outputDir --runonlystep step4 >& err4; echo "") 2>&1 | tee -a GoRruntimes
+
+echo ""
+echo "GoRAMPAGE job is complete!"
