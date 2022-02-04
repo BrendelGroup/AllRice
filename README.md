@@ -25,10 +25,7 @@ singularity exec -e -B ${PWD} DDN.sif      DiscovarDeNovo -h
 
 * [LHRWBY2021](./prj/LHRWBY2021) Computational analyses discussed in
 
-  Dangping Luo, Jose C. Huguet-Tapia, Taylor R. Raborn, Frank F. White, Volker P. Brendel, and Bing Yang (2021)
-  The TAL effector-induced R gene Xa7 of rice protects the S gene SWEET14.
-  submitted
-
-
-
-
+__Dangping Luo, Jose C. Huguet-Tapia, R. Taylor Raborn, Frank F. White, Volker P. Brendel & Bing Yang (2021)__
+__Luo, D., Huguet-Tapia, J.C., Raborn, R.T., White, F.F., Brendel, V.P. & Yang, B. (2021)__
+_The Xa7 resistance gene guards the rice susceptibility gene SWEET14 against exploitation by the bacterial blight pathogen._
+[Plant Communications 2, 100164](https://www.sciencedirect.com/science/article/pii/S2590346221000390). 
