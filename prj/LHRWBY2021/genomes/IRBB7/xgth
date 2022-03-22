@@ -2,6 +2,7 @@
 #
 cp ../IRGSP/IRGSPpep IRGSPpep1
 gth -genomic IRBB7ctg.fa -protein IRGSPpep1 -species rice                            > gth.IRGSPpepOnIRBB7 &
+sleep 5m
 cp ../IRGSP/IRGSPpep IRGSPpep2
 gth -genomic IRBB7ctg.fa -protein IRGSPpep2 -species rice -gff3out -skipalignmentout > gth.IRGSPpepOnIRBB7.gff3 &
 wait

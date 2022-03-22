@@ -1,15 +1,12 @@
 # Derivation of IRBB7ctg.fa and IRBB7ctg.gff3 = genome/annotation based on IRBB7
-#  DiscovarDeNovo contigs combined with our Region of Interest (ROI) for Xa7a
+#  DiscovarDeNovo contigs combined with our Region of Interest (ROI) for Xa7
 #
-# .../../ROI/Xa7a-100kb-Contig.fa = 
-#   Xa7a 100 kb_corrected_update_v2 Jose  (101,628 bp) from Bing Yang by email
+# Save the ROI Xa7-100kb contig in one-line sequence format:
 #
-# Save the ROI Xa7a-100kb contig in one-line sequence format:
-#
-cat <(echo ">Xa7a-100kb-Contig")   \
-    <(tail -n +2 ../../ROI/Xa7a-100kb-Contig.fa | tr -d '\n')   \
+cat <(echo ">Xa7-100kb-Contig")   \
+    <(tail -n +2 ../../ROI/MW561276.fna | tr -d '\n')   \
     | sed '$a\'   \
-> Xa7a-100kb-Contig.fa
+> Xa7-100kb-Contig.fa
 
 # Preparing a BLAST database for the IRBB7 ddn contigs:
 #
@@ -23,20 +20,20 @@ makeblastdb -in IRBB7fl.fa -dbtype nucl -out IRBB7FL -parse_seqids
 # ... view progress with 'tail -f err'
 wait
 
-# Find ddn contigs that match Xa7a:
+# Find ddn contigs that match Xa7:
 #
 ./xblast
 
-# Create IRBB7ctg.fa = IRBB7fl.fa with Xa7a, but matching ddn contigs removed
+# Create IRBB7ctg.fa = IRBB7fl.fa with Xa7, but matching ddn contigs removed
 #
 ./xmkIRBB7ctg
 
 # Map IRGSP proteins on the IRBB7ctg.fa sequences:
 #
-./xgth >& gth.log &
+./xgth >& gth.log
 # ... this will take a while ...
 
-# ... then pull out and re-align the proteins matching Xa7a-100kb-Contig.fa:
+# ... then pull out and re-align the proteins matching Xa7-100kb-Contig.fa:
 #
 ./xgth2
 # ... creates IRBB7ctg.gff3, annotation corresponding to IRBB7ctg.fa for use
@@ -44,4 +41,4 @@ wait
 
 # Removing unneeded index files:
 #
-\rm IRBB7ctg.fa.* Xa7a-100kb-Contig.fa.*
+\rm IRBB7ctg.fa.* Xa7-100kb-Contig.fa.*

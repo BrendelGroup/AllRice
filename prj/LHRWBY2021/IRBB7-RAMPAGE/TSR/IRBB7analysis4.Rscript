@@ -1,0 +1,140 @@
+library(edgeR)
+library(R2HTML)
+
+options(max.print=10000000)
+options(width=500)
+
+#Read TSR data:
+#
+TSRdata <- read.delim("TSR-OUTPUT/TSRsetCombined.txt", check.names=FALSE, stringsAsFactors=FALSE)
+colnames(TSRdata)[1] <- "promoter"
+
+#Read IRBB7 genes to IRGSP genes correspondence:
+#
+matchedgenes <- read.delim("geneID2IRGSPmatch", header=FALSE, check.names=FALSE, stringsAsFactors=FALSE)
+colnames(matchedgenes) <- c("contig", "from", "to", "gene", "genematch")
+genedesc <- read.delim("IRGSPgenes", header=FALSE, check.names=FALSE, stringsAsFactors=FALSE)
+colnames(genedesc) <- c("gene", "description")
+
+# ... add the NCBI URL for the gene products:
+#
+tmpv <- paste("<a href='https://www.ncbi.nlm.nih.gov/protein/",matchedgenes$genematch,sep="")
+tmpv <- paste(tmpv,"'>",sep="")
+tmpv <- paste(tmpv,matchedgenes$genematch,sep="")
+tmpv <- paste(tmpv,"</a>",sep="")
+matchedgenes$genelink <- tmpv
+matchedgenes <- merge(matchedgenes,genedesc,by.x="genematch",by.y="gene",all.x=TRUE)
+
+# ... update TSRdata to include matching gene information:
+#
+TSRdata <- merge(TSRdata,matchedgenes,by.x="featureID",by.y="gene",all.x=TRUE)
+
+#  ... and change promoter column to include the same:
+#
+TSRdata$promoter <- paste(TSRdata$promoter,TSRdata$featureID,sep="=")
+TSRdata$promoter <- paste(TSRdata$promoter,TSRdata$genematch,sep="=")
+
+
+#Create a DGEList object "countdata" from TSRdata columns:
+#
+countdata <- DGEList(genes=TSRdata$promoter, counts=TSRdata[c(13,15,17,19)])
+countdata <- calcNormFactors(countdata)
+
+#Check:
+#
+countdata$samples
+
+#PlotMDS:
+#
+pdffile <- "IRBB7plots.pdf"
+pdf(pdffile)
+plotMDS(countdata)
+
+
+Treatment <- factor(c("C","C","I","I"))
+#Checking on assignments:
+#
+data.frame(Sample=colnames(countdata),Treatment)
+
+design = model.matrix(~Treatment)
+rownames(design) <- colnames(countdata)
+
+countdata <- estimateDisp(countdata, design, robust=TRUE)
+
+#Showing the calculated common.dispersion:
+#
+cat("\nCommon dispersion:\n\n")
+countdata$common.dispersion
+
+#Plotting the variance:
+#
+plotBCV(countdata)
+
+#Now fitting a model:
+#
+fit <- glmFit(countdata, design)
+lrt <- glmLRT(fit)
+
+#So, what have we?
+#
+cat("\ntopTags:\n\n")
+topTags(lrt)
+
+#o <- order(lrt$table$PValue)
+#cat("\nTop cmp by PValue:\n\n")
+#cpm(countdata)[o[1:10],]
+
+
+#de is a vector with values -1 (downregulated), 0, and 1 (upregulated):
+#
+cat("\nSummary of DGE test:\n\n")
+summary(de <- decideTestsDGE(lrt))
+
+#as.logical(de) is TRUE for non-zero values and FALSE for zero values:
+#
+detags <- rownames(countdata)[as.logical(de)]
+
+#The differentially expressed genes will be colored in the following plot:
+#
+plotSmear(lrt,de.tags=detags)
+abline(h=c(-1,1), col="blue")
+
+
+#Now printing out what we are interested in:
+#
+TSRdataplus <- cbind(TSRdata,lrt$table)
+
+cpmdata <- cpm(countdata)
+colnames(cpmdata) <- paste("CPM",colnames(countdata$counts),sep="")
+TSRdataplus <- cbind(TSRdataplus,cpmdata)
+
+
+col2prt <- c("promoter","start","end","strand","nTSSs","nTAGs","tsrPeak","tsrWdth","tsrTrq","tsrSI","tsrMSI","ctrl1","ctrl2","inoc1","inoc3","featureID","contig","from","to","genematch","genelink","description","CPMctrl1","CPMctrl2","CPMinoc1","CPMinoc3","logFC","logCPM","LR","PValue") 
+
+TSRdataprt <- TSRdataplus[,col2prt]
+
+
+sink("highgenes")
+tmp <- TSRdataprt[order(TSRdataprt$logCPM,decreasing=TRUE),]
+tmp2prt <- tmp[tmp$logCPM > 3.0,]
+show(tmp2prt)
+HTML(tmp2prt,file="highgenes.html",append=FALSE,row.names=FALSE)
+sink()
+
+
+sink("upgenes")
+TSRdataup <- TSRdataprt[de == "1",]
+tmp <- TSRdataup[order(TSRdataup$logFC,decreasing=TRUE),]
+tmp2prt <- tmp[tmp$logCPM > 3.0,]
+show(tmp2prt)
+HTML(tmp2prt,file="upgenes.html",append=FALSE,row.names=FALSE)
+sink()
+
+
+sink("downgenes")
+TSRdatadown <- TSRdataprt[de == "-1",]
+tmp <- TSRdatadown[order(TSRdatadown$logFC),]
+tmp2prt <- tmp[tmp$logCPM > 3.0,]
+show(tmp2prt)
+HTML(tmp2prt,file="downgenes.html",append=FALSE,row.names=FALSE)
+sink()

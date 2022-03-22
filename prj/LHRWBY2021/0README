@@ -1,53 +1,42 @@
-#OSseqPRJ	Last update: 12/23/2020
-#Various projects concerning rice genome analyses.
+# Setting up a work directory:
+#
+mkdir Xa7PAPER
+cd Xa7PAPER/
 
-ROI
-	Regions of Interest (Xa7a contig and protein)
+# Getting what we need:
+#
+wget -O AllRice-1.0.0.tar.gz https://github.com/BrendelGroup/AllRice/archive/refs/tags/v1.0.0.tar.gz
+tar -xzf AllRice-1.0.0.tar.gz 
+cd AllRice-1.0.0/
+cd prj/LHRWBY2021/tools
+source 0README 
+#
+# ... provides:
+# AllRice.sif  DDN.sif  GoRAMPAGE/  tsr.sif
+cd ..
 
+cd reads/DDN/IRBB7
+bash ./0Record
+# ... for this to work, the scp commands in ddn*/0Record have to be replaced
+#   with a publicly accessible download
+cd ../../..
+cd genomes/DiscovarDeNovo/IRBB7ddn
+bash 0Record
 
-tools
-	singularity containers providing the code used in the project	
+cd ../../IRGSP
+bash ./0README
 
+cd ../IRBB7
+bash ./0README
 
-reads
-	DDN     = DiscovarDeNovo library sequencing results
-	RAMPAGE = 3 libraries for inoculated, 2 libraries for control
-	RNASEQ  = 2 libraries each for inoculated, mock, and control
+cd ../../reads/RAMPAGE
+bash ./0README
+cd ../../IRBB7-RAMPAGE
+bash ./0README >& log
 
-
-genomes
-	DiscovarDeNovo
-		requires
-			tools/ddn.sif
-			tools/AllRice.sif
-			reads/DDN
-	IRGSP
-		used as reference genome
-	IRBB7
-		requires
-			tools/AllRice.sif
-			genomes/DisocovarDeNovo/IRBB7ddn
-			genomes/IRGSP
-			ROI
-
-
-IRBB7-RAMPAGE
-	requires
-		tools/tsr.sif
-		genomes/IRBB7/IRBB7ctg.fa
-		genomes/IRBB7/IRBB7ctg.gff3
-		reads/RAMPAGE/GSF*
-
-
-IRBB7-RNASEQ
-	requires
-		tools/AllRice.sif
-		genomes/IRBB7/IRBB7ctg.fa
-		genomes/IRBB7/IRBB7ctg.gff3
-		IRBB7-RAMPAGE/TSR files
-		reads/RNASEQ/IRBB7*.fq
-
-
-IGV
-	instructions on how to show all data in a locally
-	installed IGV browser
+cd ../reads/RNASEQ
+bash ./0README
+# ... for this to work, the scp command in raw/0Record has to be replaced
+#   with a publicly accessible download
+cd ../../IRBB7-RNASEQ
+bash ./0README

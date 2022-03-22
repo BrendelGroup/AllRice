@@ -1,0 +1,4 @@
+Rscript --default-packages=methods,datasets,utils,grDevices,graphics,stats  IRBB7analysis4.Rscript > analysis4
+
+mkdir ANALYSIS4
+mv analysis4 downgenes* highgenes* IRBB7plots.pdf upgenes* ANALYSIS4

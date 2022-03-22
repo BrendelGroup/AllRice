@@ -1,0 +1,10 @@
+#!/bin/bash
+#
+
+perl -e 'my $gene="null"; while (<>) {if (/Parent=(gene.*)\;Target=(\S*) /) {if ($1 ne $gene) {print "$1\t$2\n"; $gene = $1;} }}' IRBB7ctg.gff3  > geneID2IRGSPmatch
+perl -e 'my $gene="null"; while (<>) {if (/(\S*)\t(\S*)\t(\S*)\t(\d+)\t(\d+).*Parent=(gene.*)\;Target=(\S*) /) {if ($6 ne gene) {print "$1\t$4\t$5\t$6\t$7\n"; $gene = $6;} }}' IRBB7ctg.gff3 > geneID2IRGSPmatch
+
+egrep "^>" ../../genomes/IRGSP/IRGSPpep | cut -c2- | cut -d" " -f1 > tmpg
+egrep "^>" ../../genomes/IRGSP/IRGSPpep | cut -c2- | cut -d" " -f2- | cut -d"[" -f1 | sed -e "s/ $//" > tmpd
+paste tmpg tmpd > IRGSPgenes
+\rm tmpg tmpd

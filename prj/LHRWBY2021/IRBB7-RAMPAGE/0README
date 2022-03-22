@@ -1,32 +1,31 @@
-Complete GoRAMPAGE run on IRRB7 RAMPAGE reads versus IRBB7 genome
+#Complete GoRAMPAGE run on IRRB7 RAMPAGE reads versus IRBB7 genome
+#
+#! Run the following first to switch to FROMSCRATCH mode - which starts with the
+#  raw reads from the sequencing facility - from the default DOWNLOAD mode, which
+#  uses the cleanned-up reads deposited at NCBI:
+#
+#	sed -i -e 's#MODE="DOWNLOAD"#MODE="FROMSCRATCH"#' xrunme xsetup TSR/0Record
 
-xsetup		- run this first to prepare for:
+#xsetup		- run this first to prepare for:
 
-xrunme		- the script to produce the alignment data in results/alignment 
-
-
-Record of data work:
-
-[]
-bggnomic.soic.indiana.edu
-/projects/vbrendel/OSseqPRJ/IRBB7-RAMPAGE
-
-0README  genome  GoRAMPAGE.conf  reads  results  xrunme  xsetup
-
-Mon Dec 21 19:23:24 EST 2020
-
-[]time singularity exec -e -B ../ ../tools/tsr.sif  bash xrunme
-
-real	38m48.349s
-user	156m5.659s
-sys	9m11.031s
-[]
+#xrunme		- the script to produce the alignment data in results/alignment 
 
 
+#Record of data work:
+#
+ls -RC
+
+singularity exec -e -B${PWD}/.. ../tools/tsr.sif  bash xsetup
+time singularity exec -e -B${PWD}/.. ../tools/tsr.sif  bash xrunme
+#
+#real	51m58.593s
+#user	188m13.187s
+#sys	8m39.005s
 cd TSR
-[]time singularity exec -e -B ../.. ../../tools/tsr.sif  bash 0Record
-
-real	50m48.081s
-user	74m27.303s
-sys	9m49.989s
-[]
+time singularity exec -e -B${PWD}/../.. ../../tools/tsr.sif  bash 0Record
+#
+#real	66m56.115s
+#user	102m6.112s
+#sys	4m41.924s
+cd ..
+ls -RC

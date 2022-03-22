@@ -1,21 +1,22 @@
 #!/bin/bash
 #
-egrep Xa7a gth.IRGSPpepOnIRBB7.gff3 | egrep Target | cut -d";" -f3 | cut -d"=" -f2 | cut -d" " -f1 > lstMprt
-cat <(blastdbcmd -db ../IRGSP/IRGSPpep -entry_batch lstMprt) Xa7aPRT.fa > tmpMprt
+egrep Xa7 gth.IRGSPpepOnIRBB7.gff3 | egrep Target | cut -d";" -f3 | cut -d"=" -f2 | cut -d" " -f1 > lstMprt
+gt seqtransform -addstopaminos -o tmpprt ../../ROI/QQY97222.faa
+cat <(blastdbcmd -db ../IRGSP/IRGSPpep -entry_batch lstMprt) tmpprt > tmpMprt
 
-gth -genomic Xa7a-100kb-Contig.fa -protein tmpMprt -species rice                            > gth.IRGSPpepOnXa7a
-gth -genomic Xa7a-100kb-Contig.fa -protein tmpMprt -species rice -gff3out -skipalignmentout > gth.IRGSPpepOnXa7a.gff3
+gth -genomic Xa7-100kb-Contig.fa -protein tmpMprt -species rice                            > gth.IRGSPpepOnXa7
+gth -genomic Xa7-100kb-Contig.fa -protein tmpMprt -species rice -gff3out -skipalignmentout > gth.IRGSPpepOnXa7.gff3
 
-\rm lstMprt tmpMprt*
+\rm lstMprt tmpprt tmpMprt*
 
 # The gth annotations were done on the unmasked sequence, so we need to change the sequence names;
 # and we are going to change the numbered gene and mRNA labels to reflect the gth targets:
 #
-sed -e "s/Xa7a-100kb-Contig/Xa7a-100kb-Contig-masked/" ./gth.IRGSPpepOnXa7a.gff3 \
-	> gth.IRGSP102pepOnXa7a.gff3
-./xgthgff3ByTargets gth.IRGSP102pepOnXa7a.gff3
+sed -e "s/Xa7-100kb-Contig/Xa7-100kb-Contig-masked/" ./gth.IRGSPpepOnXa7.gff3 \
+	> gth.IRGSP102pepOnXa7.gff3
+./xgthgff3ByTargets gth.IRGSP102pepOnXa7.gff3
 # (... this is the current annotation)
 
-cat <(egrep -v "Xa7a-100kb" ./gth.IRGSPpepOnIRBB7.gff3) \
-    <(tail -n +3 ./adj_gth.IRGSP102pepOnXa7a.gff3) \
+cat <(egrep -v "Xa7-100kb" ./gth.IRGSPpepOnIRBB7.gff3) \
+    <(tail -n +3 ./adj_gth.IRGSP102pepOnXa7.gff3) \
 > IRBB7ctg.gff3

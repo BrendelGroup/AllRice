@@ -1,1 +1,2 @@
-singularity exec -e -B /projects/vbrendel/Xa7a-ANNOTATION/genome ../ddn.simg DiscovarDeNovo NUM_THREADS=8 MAX_MEM_GB=256 READS=./IRBB7ddn_1.fastq,./IRBB7ddn_2.fastq OUT_DIR=./assembly >& err
+singularity exec -e -B${PWD}/../../../..  ../../../tools/ddn.sif DiscovarDeNovo \
+	NUM_THREADS=8 MAX_MEM_GB=256 READS=./IRBB7ddn_1.fastq,./IRBB7ddn_2.fastq OUT_DIR=./assembly >& err

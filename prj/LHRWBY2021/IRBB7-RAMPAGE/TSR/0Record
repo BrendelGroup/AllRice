@@ -1,0 +1,71 @@
+#!/bin/bash
+#
+
+MODE="DOWNLOAD"		# "FROMSCRATCH" will recap read processing from original files
+			# "DOWNLOAD" will use the cleaned reads deposited at NCBI
+
+ln -s ../../genomes/IRBB7/IRBB7ctg.gff3 ./
+
+mkdir BAMDIR
+cd BAMDIR
+if [ $MODE = "FROMSCRATCH" ]; then
+  ln -s ../../results/alignments/GSF-1119_S1_dm_DL1_1.bam ctrl1.bam
+  ln -s ../../results/alignments/GSF-1119_S1_dm_DL1_2.bam ctrl2.bam
+  ln -s ../../results/alignments/GSF-1119_S1_dm_DL2_1.bam inoc1.bam
+  ln -s ../../results/alignments/GSF-1119_S1_dm_DL2_2.bam inoc2.bam
+  ln -s ../../results/alignments/GSF-1119_S1_dm_DL2_3.bam inoc3.bam
+else
+  ln -s ../../results/alignments/SRR13552962.bam ctrl1.bam
+  ln -s ../../results/alignments/SRR13552963.bam ctrl2.bam
+  ln -s ../../results/alignments/SRR13552964.bam inoc1.bam
+  ln -s ../../results/alignments/SRR13552965.bam inoc2.bam
+  ln -s ../../results/alignments/SRR13552966.bam inoc3.bam
+fi
+
+samples="ctrl1 ctrl2 inoc1 inoc2 inoc3"
+mkdir ../SAMDIR
+for exp in $samples
+do
+  samtools index $exp.bam 
+  samtools view -O SAM -h $exp.bam > ../SAMDIR/$exp.sam
+done
+cd ..
+
+mkdir BA4DIR
+cd BA4DIR
+if [ $MODE = "FROMSCRATCH" ]; then
+  ln -s ../../results/alignments/GSF-1119_S1_dm_DL1_1.bam ctrl1.bam
+  ln -s ../../results/alignments/GSF-1119_S1_dm_DL1_2.bam ctrl2.bam
+  ln -s ../../results/alignments/GSF-1119_S1_dm_DL2_1.bam inoc1.bam
+  ln -s ../../results/alignments/GSF-1119_S1_dm_DL2_3.bam inoc3.bam
+else
+  ln -s ../../results/alignments/SRR13552962.bam ctrl1.bam
+  ln -s ../../results/alignments/SRR13552963.bam ctrl2.bam
+  ln -s ../../results/alignments/SRR13552964.bam inoc1.bam
+  ln -s ../../results/alignments/SRR13552966.bam inoc3.bam
+fi
+cd ..
+
+
+./xgene
+#
+# ... => geneID2IRGSPmatch  IRGSPgenes
+
+
+####xcheck5
+#xrunI5a
+# ... runs the analysis on all 5 RNA-seq data sets; however, inoc2 looks like an outlier
+# in several ways (including library size; also: ANALYSIS5/IRBB7plots.pdf)
+
+
+# Thus: proceed with samples ctrl1 ctrl2 inoc1 inoc3 only ...
+#
+./xrunI4
+mkdir TSR-OUTPUT
+\rm IRBB7rampageP1.RData
+mv outI4 IRBB7rampageP.RData *set*  TSR-OUTPUT
+
+# Now what we are really interested in: identification of diffentially expressed genes
+# (with edgeR):
+#
+./xrunI4a
