@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-cd raw && bash xln && cd ..
+cd raw && bash 0README && bash xln && cd ..
 
 cd qctrl && bash xqctrl && cd ..
 
