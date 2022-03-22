@@ -1,14 +1,39 @@
 #!/bin/bash
 
+MODE="DOWNLOAD"		# "FROMSCRATCH" will recap read processing from original files
+			# "DOWNLOAD" will use the cleaned reads deposited at NCBI
+
 mkdir genome
 cd genome
 ln -s ../../genomes/IRBB7/IRBB7ctg.fa ./
 cd ..
 
 mkdir reads
-cd reads
-ln -s ../../reads/RAMPAGE/GSF-1119_S1_R1_001.fastq ./GSF-1119_S1.R1.fq
-ln -s ../../reads/RAMPAGE/GSF-1119_S1_R2_001.fastq ./GSF-1119_S1.R2.fq
-cd ..
-
 mkdir results
+
+if [ $MODE = "FROMSCRATCH" ]; then
+  cd reads
+  ln -s ../../reads/RAMPAGE/GSF-1119_S1_R1_001.fastq ./GSF-1119_S1.R1.fq
+  ln -s ../../reads/RAMPAGE/GSF-1119_S1_R2_001.fastq ./GSF-1119_S1.R2.fq
+  cd ..
+else
+  echo "... cleaned reads were downloaded from NCBI; see results/reads/" > reads/0README
+  mkdir results/reads
+  cd results/reads
+  fasterq-dump SRR13552962
+  fasterq-dump SRR13552963
+  fasterq-dump SRR13552964
+  fasterq-dump SRR13552965
+  fasterq-dump SRR13552966
+  mv SRR13552962_1.fastq SRR13552962.READ1.fq
+  mv SRR13552962_2.fastq SRR13552962.READ2.fq
+  mv SRR13552963_1.fastq SRR13552963.READ1.fq
+  mv SRR13552963_2.fastq SRR13552963.READ2.fq
+  mv SRR13552964_1.fastq SRR13552964.READ1.fq
+  mv SRR13552964_2.fastq SRR13552964.READ2.fq
+  mv SRR13552965_1.fastq SRR13552965.READ1.fq
+  mv SRR13552965_2.fastq SRR13552965.READ2.fq
+  mv SRR13552966_1.fastq SRR13552966.READ1.fq
+  mv SRR13552966_2.fastq SRR13552966.READ2.fq
+  cd ../..
+fi

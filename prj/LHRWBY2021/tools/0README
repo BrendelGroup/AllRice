@@ -1,5 +1,5 @@
 git clone https://github.com/BrendelGroup/GoRAMPAGE
 
 singularity pull tsr.sif shub://BrendelGroup/TSRchitect
-singularity pull AllRice.sif shub://BrendelGroup/AllRice
-singularity pull ddn.sif shub://BrendelGroup/AllRice:ddn
+wget https://BrendelGroup.org/SingularityHub/AllRice.sif
+wget https://BrendelGroup.org/SingularityHub/DDN.sif

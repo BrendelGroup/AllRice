@@ -1,17 +1,19 @@
 # Processing of "ddn22" reads (internally labeled "160722NH_DNASEQ")
 #
+
+scp bggnomic.luddy.indiana.edu:/projects/vbrendel/OSseqPRJ/reads/DDN/IRBB7/ddn22/raw/*gz ./raw/
+#
 # raw/	contains the reads as downloaded from the sequencing center
 
 ./xln
 
-# Adjust the number of threads to be used with the -j argument:
+# Adjust the number of threads to use with the -j argument:
 #
-time singularity exec -e -B ${PWD}/../../../..  ../../../../tools/AllRice.sif  make -j 22 -f Makefile_PR_IRBB7ddn22 >& err
+time singularity exec -e -B ${PWD}/../../../..  ../../../../tools/AllRice.sif  make -j 12 -f Makefile_PR_IRBB7ddn22 >& make_log
 
-#real	69m44.340s
-#user	458m20.766s
-#sys	18m43.522s
-#[]
+#real	100m2.443s
+#user	623m53.157s
+#sys	13m6.501s
 
 
 # Optional integrity checks:
@@ -19,12 +21,14 @@ time singularity exec -e -B ${PWD}/../../../..  ../../../../tools/AllRice.sif  m
 # How many surving read pairs are there?
 #
 egrep -c "^>" *fa
-egrep "^Input Read Pairs" err
+egrep "^Input Read Pairs" make_log
+perl -e "print 817046+1656596+3527084+3532711+3528443+3529323"
 # ... checks out!
 
 # Let's check that the sum total of IRBB7ddn22-mergedreads* entries is what we expect:
 #
 wc -l DIR*/IRBB7ddn22-mergedreads*
+perl -e "print 8 * 16591203"
 # ... checks out! (the total should be 8 times the number of sequences in each of *fa files)
 
 # The summary shows how the surviving reads from the Trimmomatic step are further filtered

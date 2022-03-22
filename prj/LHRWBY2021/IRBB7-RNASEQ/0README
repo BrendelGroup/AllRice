@@ -5,4 +5,8 @@ cp ../genomes/IRBB7/IRBB7ctg.gff3 IRBB7.gff3
 
 # Then:
 #
-singularity exec -e -B ${PWD}/../  ../tools/AllRice.sif  bash ./0Record
+time singularity exec -e -B ${PWD}/../  ../tools/AllRice.sif  bash ./0Record
+
+#real	876m8.861s
+#user	4091m14.531s
+#sys	131m59.091s

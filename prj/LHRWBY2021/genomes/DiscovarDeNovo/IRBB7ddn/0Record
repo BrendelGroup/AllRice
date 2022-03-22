@@ -9,12 +9,12 @@ gunzip -c ../../../reads/DDN/IRBB7/IRBB7ddn_2.fastq.gz > IRBB7ddn_2.fastq
 # Assembly:
 # (Note: addjust  NUM_THREADS=32 MAX_MEM_GB=256 appropriately)
 #
-time singularity exec -e -B ../../..  ../../../tools/ddn.sif DiscovarDeNovo \
+time singularity exec -e -B${PWD}/../../..  ../../../tools/ddn.sif DiscovarDeNovo \
 	NUM_THREADS=32 MAX_MEM_GB=256 READS=./IRBB7ddn_1.fastq,./IRBB7ddn_2.fastq \
 	OUT_DIR=./assembly >& err
-#real	151m47.213s
-#user	2630m23.834s
-#sys	156m0.638s
+#real	277m29.799s
+#user	3023m54.533s
+#sys	114m13.847s
 
 #Note: Read pair input as per input files:
 #
@@ -30,7 +30,8 @@ egrep "^There are" err
 #There are 86,877,450 reads of mean length 250.1 and mean base quality 39.3.
 
 
-singularity exec -e -B ../../..  ../../../tools/ddn.sif  bash xcleanup
+singularity exec -e -B${PWD}/../../..  ../../../tools/ddn.sif  \
+	bash xcleanup
 #
 # ... to provide assembly statistics and remove short contigs (<500 bp)
 
@@ -45,8 +46,8 @@ singularity exec -e -B ../../..  ../../../tools/ddn.sif  bash xcleanup
 
 # Making a BLAST database for subsequent use:
 #
-singularity exec -e -B ../../..  ../../../tools/AllRice.sif  makeblastdb -in IRBB7ddn.fa -dbtype nucl -out IRBB7genome -parse_seqids
-./xmakedb
+singularity exec -e -B${PWD}/../../..  ../../../tools/AllRice.sif  \
+	makeblastdb -in IRBB7ddn.fa -dbtype nucl -out IRBB7genome -parse_seqids
 
 
 # Cleanup: remove unnecessary files ...

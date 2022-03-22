@@ -1,11 +1,16 @@
 # Derivation of IRBB7ctg.fa and IRBB7ctg.gff3 = genome/annotation based on IRBB7
-#  DiscovarDeNovo contigs combined with our Region of Interest (ROI) for Xa7a
+#  DiscovarDeNovo contigs combined with our Region of Interest (ROI) for Xa7
 
-singularity exec -e -B ../..  ../../tools/AllRice.sif  bash 0Record
+time singularity exec -e -B${PWD}/../..  ${PWD}/../../tools/AllRice.sif  bash 0Record
 
 # ... should reproduce the entire workflow.
+#
+#real	424m12.371s
+#user	826m24.835s
+#sys	1m50.037s
+
 # Requires:
-# 	../tools/AllRice.sif
+# 	../../tools/AllRice.sif
 # 	../DisocovarDeNovo/IRBB7ddn
 # 	../IRGSP
-# 	../ROI
+# 	../../ROI

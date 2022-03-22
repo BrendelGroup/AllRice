@@ -1,26 +1,26 @@
-# Identify ddn contigs matching Xa7a:
+# Identify ddn contigs matching Xa7:
 #
-blastn -query Xa7a-100kb-Contig-masked.fa -db IRBB7FL -evalue 1e-20 > blastn-Xa7a-vs-IRBB7.txt
-MuSeqBox -l 25 -c MSBcrtfile -i blastn-Xa7a-vs-IRBB7.txt > blastn-Xa7a-vs-IRBB7.msb
-egrep "Contig" blastn-Xa7a-vs-IRBB7.msb | sed -e "s/\s\{1,\}/	/g" | sort -k7 -n > blastn-Xa7a-vs-IRBB7.tab
+blastn -query Xa7-100kb-Contig-masked.fa -db IRBB7FL -evalue 1e-20 > blastn-Xa7-vs-IRBB7.txt
+MuSeqBox -l 25 -c MSBcrtfile -i blastn-Xa7-vs-IRBB7.txt > blastn-Xa7-vs-IRBB7.msb
+egrep "Contig" blastn-Xa7-vs-IRBB7.msb | sed -e "s/\s\{1,\}/	/g" | sort -k7 -n > blastn-Xa7-vs-IRBB7.tab
 
 # Save the matching ddn contigs in matching orientation:
 #
-paste <(cut -f2 blastn-Xa7a-vs-IRBB7.tab) <(cut -f15 blastn-Xa7a-vs-IRBB7.tab | cut -d"/" -f2) | sort -u | egrep "\+" | cut -f1 > tmpPlist
+paste <(cut -f2 blastn-Xa7-vs-IRBB7.tab) <(cut -f15 blastn-Xa7-vs-IRBB7.tab | cut -d"/" -f2) | sort -u | egrep "\+" | cut -f1 > tmpPlist
 sed tmpPlist -e "s/^/blastdbcmd -db IRBB7FL -entry /" | sed -e "s/$/ -line_length 100000/" | bash > tmpPfl
 
-paste <(cut -f2 blastn-Xa7a-vs-IRBB7.tab) <(cut -f15 blastn-Xa7a-vs-IRBB7.tab | cut -d"/" -f2) | sort -u | egrep "\-" | cut -f1 > tmpMlist
+paste <(cut -f2 blastn-Xa7-vs-IRBB7.tab) <(cut -f15 blastn-Xa7-vs-IRBB7.tab | cut -d"/" -f2) | sort -u | egrep "\-" | cut -f1 > tmpMlist
 sed tmpMlist -e "s/^/blastdbcmd -db IRBB7FL -entry /" | sed -e "s/$/ -strand minus -line_length 100000/" | bash > tmpMfl
 
-cat tmpPfl tmpMfl > fl-matching-Xa7a.fa
+cat tmpPfl tmpMfl > fl-matching-Xa7.fa
 
-# Compare just the matching ddn contigs to Xa7a for simple output:
+# Compare just the matching ddn contigs to Xa7 for simple output:
 #
-blastn -query Xa7a-100kb-Contig-masked.fa -subject fl-matching-Xa7a.fa -evalue 1e-20 | sed -e "s#^> #>#" > blastn-Xa7a-vs-matchingFL.txt
-MuSeqBox -l 25 -c MSBcrtfile -i blastn-Xa7a-vs-matchingFL.txt > blastn-Xa7a-vs-matchingFL.msb
-egrep "Contig" blastn-Xa7a-vs-matchingFL.msb | sed -e "s/\s\{1,\}/	/g" | sort -k7 -n > blastn-Xa7a-vs-matchingFL.tab
+blastn -query Xa7-100kb-Contig-masked.fa -subject fl-matching-Xa7.fa -evalue 1e-20 | sed -e "s#^> #>#" > blastn-Xa7-vs-matchingFL.txt
+MuSeqBox -l 25 -c MSBcrtfile -i blastn-Xa7-vs-matchingFL.txt > blastn-Xa7-vs-matchingFL.msb
+egrep "Contig" blastn-Xa7-vs-matchingFL.msb | sed -e "s/\s\{1,\}/	/g" | sort -k7 -n > blastn-Xa7-vs-matchingFL.tab
 
-cat tmpPlist tmpMlist | cut -d"/" -f2 | sed -e "s/^/egrep /" | sed -e "s/$/ blastn-Xa7a-vs-matchingFL.tab/" | bash > blastn-Xa7a-vs-matchingFL-ByFL.tab
+cat tmpPlist tmpMlist | cut -d"/" -f2 | sed -e "s/^/egrep /" | sed -e "s/$/ blastn-Xa7-vs-matchingFL.tab/" | bash > blastn-Xa7-vs-matchingFL-ByFL.tab
 \rm tmpPlist tmpPfl tmpMlist tmpMfl
 
 # While we are at it, might as well find the repetitive elements in the ddn contigs:
@@ -28,13 +28,13 @@ cat tmpPlist tmpMlist | cut -d"/" -f2 | sed -e "s/^/egrep /" | sed -e "s/$/ blas
 RepeatMasker \
 	-lib /opt/RepeatMasker/Libraries/RITE-12-10-2020.fasta \
 	-frag 500000 -div 35 -s -dir flmX.RMoutput -a -gff \
-	fl-matching-Xa7a.fa
+	fl-matching-Xa7.fa
 
 # ... will produce *align, *masked, *out, *out.gff, and *tbl output files
 #     (*.fa.cat file seems redundant to *align and we'll delete it)
-\rm flmX.RMoutput/fl-matching-Xa7a.fa.cat
+\rm flmX.RMoutput/fl-matching-Xa7.fa.cat
 
 # Now save a sequence-on-one-line copy:
 #
-gt extractseq -width 1000000000000 flmX.RMoutput/fl-matching-Xa7a.fa.masked  \
-	> fl-matching-Xa7a-masked.fa
+gt extractseq -width 1000000000000 flmX.RMoutput/fl-matching-Xa7.fa.masked  \
+	> fl-matching-Xa7-masked.fa

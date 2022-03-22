@@ -12,5 +12,5 @@ do
   cd ..
 done
 
-samtools merge -R Xa7a-100kb-Contig-masked RNA-Xa7a-100kb-Contig-masked.bam IRBB7*/*-sorted.genome.bam
-samtools view -h RNA-Xa7a-100kb-Contig-masked.bam | egrep -v "flattened_line" > RNA-Xa7a-100kb-Contig-masked.sam
+samtools merge -R Xa7-100kb-Contig-masked RNA-Xa7-100kb-Contig-masked.bam IRBB7*/*-sorted.genome.bam
+samtools view -h RNA-Xa7-100kb-Contig-masked.bam | egrep -v "SN:fl" > RNA-Xa7-100kb-Contig-masked.sam

@@ -1,4 +1,6 @@
 # RAMPAGE reads/barcodes from GSF-1119 sequencing project
 
+scp bggnomic.luddy.indiana.edu:/projects/vbrendel/OSseqPRJ/reads/RAMPAGE/GSF-1119_*.fastq ./
+
 ln -s GSF-1119_S1_R1_001.fastq GSF-1119_S1.R1.fq
 ln -s GSF-1119_S1_R2_001.fastq GSF-1119_S1.R2.fq

@@ -1,4 +1,4 @@
-#OSseqPRJ	Last update: 12/23/2020
+#OSseqPRJ	                                    Last update: 3/22/2022 (VB).
 #Various projects concerning rice genome analyses.
 
 ROI
@@ -18,7 +18,7 @@ reads
 genomes
 	DiscovarDeNovo
 		requires
-			tools/ddn.sif
+			tools/DDN.sif
 			tools/AllRice.sif
 			reads/DDN
 	IRGSP
