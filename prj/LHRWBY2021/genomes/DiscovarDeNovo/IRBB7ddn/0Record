@@ -9,7 +9,7 @@ gunzip -c ../../../reads/DDN/IRBB7/IRBB7ddn_2.fastq.gz > IRBB7ddn_2.fastq
 # Assembly:
 # (Note: addjust  NUM_THREADS=32 MAX_MEM_GB=256 appropriately)
 #
-time singularity exec -e -B${PWD}/../../..  ../../../tools/ddn.sif DiscovarDeNovo \
+time singularity exec -e -B${PWD}/../../..  ../../../tools/DDN.sif DiscovarDeNovo \
 	NUM_THREADS=32 MAX_MEM_GB=256 READS=./IRBB7ddn_1.fastq,./IRBB7ddn_2.fastq \
 	OUT_DIR=./assembly >& err
 #real	277m29.799s
@@ -30,7 +30,7 @@ egrep "^There are" err
 #There are 86,877,450 reads of mean length 250.1 and mean base quality 39.3.
 
 
-singularity exec -e -B${PWD}/../../..  ../../../tools/ddn.sif  \
+singularity exec -e -B${PWD}/../../..  ../../../tools/DDN.sif  \
 	bash xcleanup
 #
 # ... to provide assembly statistics and remove short contigs (<500 bp)
