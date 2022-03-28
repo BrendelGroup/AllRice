@@ -97,7 +97,7 @@ From: fedora:35
     sed -i -e "\$d" install.sh 
     \rm -rf Flye/
     cd global-1/
-    sed -i -e "s#jellyfish samtools prepare ufasta quorum SuperReads SOAPdenovo2 PacBio MUMmer CA8 eugene#jellyfish ufasta quorum SuperReads MUMmer#"  Makefile.am
+    sed -i -e "s#jellyfish samtools prepare ufasta quorum SuperReads SOAPdenovo2 PacBio MUMmer CA8 eugene#jellyfish ufasta quorum SuperReads PacBio MUMmer#"  Makefile.am
     autoreconf
     cd ..
     ./install.sh 
