@@ -1,0 +1,11 @@
+#!/bin/bash
+#
+
+FASTAfile=$1
+
+
+# Sort the FASTA input file according to sequence length:
+#
+awk '/^>/ {printf("%s%s\t",(N>0?"\n":""),$0);N++;next;} {printf("%s",$0);} END {printf("\n");}'  $FASTAfile  | \
+	awk -F '\t' '{printf("%d\t%s - %s bp\t%s\n",length($2),$1,length($2),$2);}'  | \
+	sort -k1,1nr | cut -f2- | tr "\t" "\n" >  ByLength-$FASTAfile
