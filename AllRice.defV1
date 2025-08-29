@@ -1,35 +1,35 @@
 bootstrap: docker
-From: fedora:41
+From: fedora:35
 
 %help
     This container provides working software versions for the AllRice project.
 
 %post
-    dnf5 -y update
-    dnf5 -y install bc bzip2 findutils git lftp plocate tcsh unzip zip wget which
-    dnf5 -y install gcc-c++ make automake cmake ruby
-    dnf5 -y install glibc-static
-    dnf5 -y install boost boost-devel
-    dnf5 -y install cairo-devel pango-devel zlib-devel
-    dnf5 -y install libnsl
-    dnf5 -y install python3 python3-biopython python3-wheel python-wheel-wheel python3-virtualenv python3-pip
-    dnf5 -y install python3-distutils-extra python3-h5py python3-devel
-    dnf5 -y install pandoc
-    dnf5 -y install java-11-openjdk java-11-openjdk-devel ant
-    dnf5 -y install perl-App-cpanminus perl-LWP-Protocol-https
-    dnf5 -y install curl libcurl libcurl-devel ncurses ncurses-devel ncurses-term
-    dnf5 -y install openssl openssl-devel
+    dnf -y update
+    dnf -y install bc bzip2 findutils git lftp mlocate tcsh unzip zip wget which
+    dnf -y install gcc-c++ make automake cmake ruby
+    dnf -y install glibc-static
+    dnf -y install boost boost-devel
+    dnf -y install cairo-devel pango-devel zlib-devel
+    dnf -y install libnsl
+    dnf -y install python python-biopython python3-wheel python-wheel-wheel python3-virtualenv python3-pip
+    dnf -y install python3-h5py python3-devel
+    dnf -y install pandoc
+    dnf -y install java-11-openjdk java-11-openjdk-devel ant
+    dnf -y install perl-App-cpanminus
+    dnf -y install curl libcurl libcurl-devel ncurses ncurses-devel
+    dnf -y install openssl openssl-devel
 
 
 ### Read quality control
 
     echo 'Installing FastQC from http://www.bioinformatics.babraham.ac.uk/projects/fastqc/ '
     cd /opt
-    wget https://www.bioinformatics.babraham.ac.uk/projects/fastqc/fastqc_v0.12.1.zip
+    wget http://www.bioinformatics.babraham.ac.uk/projects/fastqc/fastqc_v0.11.9.zip
     cpanm install FindBin
-    unzip fastqc_v0.12.1.zip
+    unzip fastqc_v0.11.9.zip
     chmod +x FastQC/fastqc
-    \rm fastqc_v0.12.1.zip
+    \rm fastqc_v0.11.9.zip
 
     echo 'Installing Trimmomatic from http://www.usadellab.org/cms/index.php?page=trimmomatic '
     cd /opt
@@ -39,20 +39,6 @@ From: fedora:41
 # To run Trimmomatic, use the following alias on the host:
 #
 #alias trimmomatic="singularity exec -e -B${PWD} AllRice.sif java -Xmx16G -jar /opt/Trimmomatic-0.39/trimmomatic-0.39.jar"
-
-    echo ' Installing fastp from https://github.com/OpenGene/fastp '
-    dnf5 -y install isa-l isa-l-devel libdeflate libdeflate-devel
-    cd /opt
-    git clone https://github.com/OpenGene/fastp.git
-    cd fastp
-    make
-    mv fastp /usr/local/bin
-    
-    echo ' Installing chopper from https://github.com/wdecoster/chopper '
-    cd /opt
-    wget -q https://github.com/wdecoster/chopper/releases/download/v0.10.0b/chopper-linux
-    chmod a+x chopper-linux 
-    mv chopper-linux /usr/local/bin/chopper
 
 
 ### Read manipulation
@@ -94,7 +80,7 @@ From: fedora:41
     cd /opt
     git clone https://github.com/fenderglass/Flye.git
     cd Flye/
-    python3 setup.py install
+    python setup.py install
 
     echo 'Installing Pilon, described at https://github.com/broadinstitute/pilon/wiki '
     cd /opt
@@ -105,17 +91,13 @@ From: fedora:41
 
     echo 'Installing MaSuRCA from https://github.com/alekseyzimin/masurca '
     cd /opt
-    wget https://github.com/alekseyzimin/masurca/releases/download/v4.1.4/MaSuRCA-4.1.4.tar.gz
-    tar -xzf MaSuRCA-4.1.4.tar.gz
-    sed -i -e "4a  #include <cstdint>" MaSuRCA-4.1.4/global-1/MUMmer/include/mummer/48bit_iterator.hpp
-    sed -i -e "26a  #include <cstdint>" MaSuRCA-4.1.4/global-1/PacBio/include/misc.hpp
-    sed -i -e "26a  #include <cstdint>" MaSuRCA-4.1.4/global-1/SuperReads/include/misc.hpp
-    sed -i -e "38 s#*s2)#*s2) const#" MaSuRCA-4.1.4/global-1/SuperReads/src2/getSuperReadInsertCountsFromReadPlacementFile.cc
-    cd MaSuRCA-4.1.4
+    wget https://github.com/alekseyzimin/masurca/releases/download/v4.0.7/MaSuRCA-4.0.7.tar.gz
+    tar -xzf MaSuRCA-4.0.7.tar.gz
+    cd MaSuRCA-4.0.7
     sed -i -e "\$d" install.sh 
     \rm -rf Flye/
     cd global-1/
-    sed -i -e "s#jellyfish samtools prepare ufasta quorum SuperReads SOAPdenovo2 PacBio MUMmer CA8#jellyfish samtools ufasta quorum SuperReads PacBio MUMmer#"  Makefile.am
+    sed -i -e "s#jellyfish samtools prepare ufasta quorum SuperReads SOAPdenovo2 PacBio MUMmer CA8 eugene#jellyfish ufasta quorum SuperReads PacBio MUMmer#"  Makefile.am
     autoreconf
     cd ..
     ./install.sh 
@@ -173,9 +155,9 @@ From: fedora:41
 
     echo 'Installing RMBlast from http://www.repeatmasker.org/ '
     cd /opt
-    wget https://www.repeatmasker.org/rmblast/rmblast-2.14.1+-x64-linux.tar.gz
-    tar -xzf rmblast-2.14.1+-x64-linux.tar.gz
-    \rm rmblast-2.14.1+-x64-linux.tar.gz
+    wget http://www.repeatmasker.org/rmblast-2.10.0+-x64-linux.tar.gz
+    tar -xzf rmblast-2.10.0+-x64-linux.tar.gz
+    \rm rmblast-2.10.0+-x64-linux.tar.gz
 
     echo 'Installing TRF '
     cd /opt
@@ -190,13 +172,13 @@ From: fedora:41
 
     echo 'Installing RepeatMasker from http://www.repeatmasker.org/ '
     cd /opt
-    wget http://repeatmasker.org/RepeatMasker/RepeatMasker-4.2.1.tar.gz
-    tar -xzf RepeatMasker-4.2.1.tar.gz 
-    echo ""                         > rmcnf
-    echo "/usr/local/bin/trf"      >> rmcnf
-    echo "2"                       >> rmcnf
-    echo "/opt/rmblast-2.14.1/bin" >> rmcnf
-    echo "5"                       >> rmcnf
+    wget http://repeatmasker.org/RepeatMasker/RepeatMasker-4.1.1.tar.gz
+    tar -xzf RepeatMasker-4.1.1.tar.gz 
+    echo "/usr/local/bin/trf" > rmcnf
+    echo "2" >> rmcnf
+    echo "/opt/rmblast-2.10.0/bin" >> rmcnf
+    echo "Y" >> rmcnf
+    echo "5" >> rmcnf
     cd RepeatMasker
     perl ./configure < ../rmcnf
     cd Libraries
@@ -205,14 +187,14 @@ From: fedora:41
     \rm RITE-12-10-2020.tgz
 # ... obtained by download from https://www.genome.arizona.edu/cgi-bin/rite/index.cgi (selecting all Oryza entries)
     cd ../..
-    \rm RepeatMasker-4.2.1.tar.gz rmcnf
+    \rm RepeatMasker-4.1.1.tar.gz rmcnf
 
 
 ### R, EBSeq, DESeq2, RSEM
 
     echo 'Installing R '
     cd /opt
-    dnf5 -y install R
+    dnf -y install R
     echo 'repo <- "http://ftp.ussg.iu.edu/CRAN"' > R2install
     echo 'install.packages("pafr", repos = repo)' >> R2install
     echo 'install.packages("BiocManager", repos = repo)' >> R2install
@@ -231,21 +213,21 @@ From: fedora:41
 
 ### Alignment software
 
-    echo 'Installing BLAST+ version 2.17.0 from NCBI '
+    echo 'Installing BLAST+ version 2.12.0 from NCBI '
     cd /opt
-    wget https://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/2.17.0/ncbi-blast-2.17.0+-x64-linux.tar.gz
-    tar -xzf ncbi-blast-2.17.0+-x64-linux.tar.gz
-    cd ncbi-blast-2.17.0+/bin
+    wget ftp://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/2.12.0/ncbi-blast-2.12.0+-x64-linux.tar.gz
+    tar -xzf ncbi-blast-2.12.0+-x64-linux.tar.gz
+    cd ncbi-blast-2.12.0+/bin
     cp * /usr/local/bin/
     cd ../..
-    rm ncbi-blast-2.17.0+-x64-linux.tar.gz
+    rm ncbi-blast-2.12.0+-x64-linux.tar.gz
     cd ..
 
-    echo 'Installing MuSeqBox version 5.8 from BrendelGroup '
+    echo 'Installing MuSeqBox version 5.7 from BrendelGroup '
     cd /opt
-    wget http://www.brendelgroup.org/bioinformatics2go/Download/MuSeqBox-1-13-2024.tar.gz
-    tar -xzf MuSeqBox-1-13-2024.tar.gz
-    cd MUSEQBOX5.8/src/
+    wget http://www.brendelgroup.org/bioinformatics2go/Download/MuSeqBox-5-7-2021.tar.gz
+    tar -xzf MuSeqBox-5-7-2021.tar.gz
+    cd MUSEQBOX5.7/src/
     make linux
     make install
     make clean
@@ -309,7 +291,7 @@ From: fedora:41
     export LC_ALL=C
     export PATH=$PATH:/opt/FastQC
     export PATH=$PATH:/opt/sratoolkit.2.11.3-ubuntu64/bin
-    export PATH=$PATH:/opt/MaSuRCA-4.1.4/bin
+    export PATH=$PATH:/opt/MaSuRCA-4.0.7/bin
     export PATH=$PATH:/opt/wengan-v0.2-bin-Linux:/opt/wengan-v0.2-bin-Linux/bin
     export PATH=$PATH:/opt/bowtie2-2.4.5-linux-x86_64
     export PATH=$PATH:/opt/hisat2-2.2.1
